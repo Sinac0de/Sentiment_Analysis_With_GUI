@@ -6,6 +6,7 @@ from src.train_model import train_model
 from src.dataset import SentimentDataset, DataLoader
 from src.setup_model import tokenizer, model, device
 from src.preprocess_data import load_and_preprocess_data
+from src.data_augmentation import balance_dataset
 import os
 import sys
 sys.path.append('src')
@@ -88,8 +89,15 @@ def main():
         (train_texts, train_labels), (val_texts, val_labels), (test_texts,
                                                                test_labels) = load_and_preprocess_data(data_path)
 
-        # 2. Create dataset and dataloader
-        train_dataset = SentimentDataset(train_texts, train_labels, tokenizer)
+        # 2. Balance dataset using data augmentation
+        print("\nBalancing dataset to handle class imbalance...")
+        balanced_train_texts, balanced_train_labels, val_texts, val_labels, test_texts, test_labels = balance_dataset(
+            train_texts, train_labels, val_texts, val_labels, test_texts, test_labels
+        )
+
+        # 3. Create dataset and dataloader with balanced data
+        train_dataset = SentimentDataset(
+            balanced_train_texts, balanced_train_labels, tokenizer)
         val_dataset = SentimentDataset(val_texts, val_labels, tokenizer)
         test_dataset = SentimentDataset(test_texts, test_labels, tokenizer)
 
@@ -97,16 +105,18 @@ def main():
         val_loader = DataLoader(val_dataset, batch_size=16)
         test_loader = DataLoader(test_dataset, batch_size=16)
 
-        # 3. Train model
-        train_model(model, train_loader, val_loader, epochs=5, lr=1e-5)
+        # 4. Train model with class weights for imbalanced data
+        print("\nTraining with class weights to handle imbalanced data...")
+        train_model(model, train_loader, val_loader, epochs=5,
+                    lr=1e-5, train_labels=balanced_train_labels)
 
-        # 4. Evaluate model
+        # 5. Evaluate model
         predictions, true_labels = evaluate_model(model, test_loader, "Test")
 
-        # 5. Visualize results
+        # 6. Visualize results
         visualize_results(predictions, true_labels)
 
-        # 6. Save model
+        # 7. Save model
         os.makedirs('models', exist_ok=True)
         model.save_pretrained(model_path)
         tokenizer.save_pretrained(model_path)

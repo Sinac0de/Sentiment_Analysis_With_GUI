@@ -7,6 +7,35 @@ from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 
 
 def load_and_preprocess_data(file_path):
+    # Check if preprocessed data already exists
+    processed_data_path = '../data/processed_data'
+    train_csv_path = os.path.join(processed_data_path, 'train.csv')
+    val_csv_path = os.path.join(processed_data_path, 'val.csv')
+    test_csv_path = os.path.join(processed_data_path, 'test.csv')
+
+    if os.path.exists(train_csv_path) and os.path.exists(val_csv_path) and os.path.exists(test_csv_path):
+        print("Preprocessed data found. Loading from saved files...")
+
+        # Load preprocessed data
+        train_df = pd.read_csv(train_csv_path)
+        val_df = pd.read_csv(val_csv_path)
+        test_df = pd.read_csv(test_csv_path)
+
+        train_texts = train_df['text'].tolist()
+        train_labels = train_df['label'].tolist()
+        val_texts = val_df['text'].tolist()
+        val_labels = val_df['label'].tolist()
+        test_texts = test_df['text'].tolist()
+        test_labels = test_df['label'].tolist()
+
+        print(f"Loaded {len(train_texts)} training samples")
+        print(f"Loaded {len(val_texts)} validation samples")
+        print(f"Loaded {len(test_texts)} test samples")
+
+        return (train_texts, train_labels), (val_texts, val_labels), (test_texts, test_labels)
+
+    print("Preprocessed data not found. Starting preprocessing...")
+
     # Load dataset
     df = pd.read_excel(file_path)
 
@@ -63,13 +92,18 @@ def load_and_preprocess_data(file_path):
     )
 
     # Save preprocessed data
-    os.makedirs('../data/processed_data', exist_ok=True)
+    os.makedirs(processed_data_path, exist_ok=True)
     pd.DataFrame({'text': train_texts, 'label': train_labels}).to_csv(
-        '../data/processed_data/train.csv', index=False)
+        train_csv_path, index=False)
     pd.DataFrame({'text': val_texts, 'label': val_labels}).to_csv(
-        '../data/processed_data/val.csv', index=False)
+        val_csv_path, index=False)
     pd.DataFrame({'text': test_texts, 'label': test_labels}).to_csv(
-        '../data/processed_data/test.csv', index=False)
+        test_csv_path, index=False)
+
+    print(f"Preprocessed data saved to {processed_data_path}")
+    print(f"Training samples: {len(train_texts)}")
+    print(f"Validation samples: {len(val_texts)}")
+    print(f"Test samples: {len(test_texts)}")
 
     # Check and save label distribution and sample data
     label_counts = df['label'].value_counts().sort_index()
