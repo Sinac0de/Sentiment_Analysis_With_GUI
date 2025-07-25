@@ -1,8 +1,10 @@
-transformers
 torch
-pandas
-numpy
+transformers
 scikit-learn
+pandas
 matplotlib
 seaborn
-PersianStemmer
+hazm
+openpyxl
+tqdm
+streamlit

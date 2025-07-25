@@ -1,0 +1,47 @@
+========== Persian Sentiment Analysis Pipeline =========
+
+[Pipeline] Step 1: Preprocessing and Data Preparation...
+[Pipeline] No preprocessed data found. Running preprocessing...
+[Preprocessing] No processed files found. Starting preprocessing from data/sentipers.xlsx ...
+[Preprocessing] Loaded 15683 samples from Excel.
+[Preprocessing] Converting polarity to label ...
+[Preprocessing] Normalizing and stemming texts ...
+Normalizing: 100%|███████████████| 15683/15683 [00:00<00:00, 1743467.08sample/s]
+[Preprocessing] Augmenting negative samples ...
+[Preprocessing] Splitting data ...
+[Preprocessing] Done. Processed data saved in data/processed_data.
+[Pipeline] Preprocessing complete.
+
+[Pipeline] Step 2: Model Training and Evaluation...
+[Pipeline] No trained model found. Starting training...
+[Training] Starting model training...
+[Training] Epoch 1/5
+[Training] Batch: 100%|████████| 730/730 [1:40:17<00:00,  8.24s/it, loss=0.8762]
+[Validation] Batch: 100%|████████| 157/157 [04:14<00:00,  1.62s/it, loss=0.8368]
+[Training] Epoch 1: Train Loss: 0.8932, Train Acc: 0.6183, Val Loss: 0.6238, Val Acc: 0.7550
+[Training] Epoch 2/5
+[Training] Batch: 100%|████████| 730/730 [1:26:29<00:00,  7.11s/it, loss=0.4942]
+[Validation] Batch: 100%|████████| 157/157 [04:17<00:00,  1.64s/it, loss=0.8732]
+[Training] Epoch 2: Train Loss: 0.5124, Train Acc: 0.8035, Val Loss: 0.5270, Val Acc: 0.7914
+[Training] Epoch 3/5
+[Training] Batch: 100%|████████| 730/730 [1:25:41<00:00,  7.04s/it, loss=0.1560]
+[Validation] Batch: 100%|████████| 157/157 [04:59<00:00,  1.91s/it, loss=2.0409]
+[Training] Epoch 3: Train Loss: 0.3018, Train Acc: 0.8889, Val Loss: 0.6837, Val Acc: 0.8046
+[Training] Epoch 4/5
+[Training] Batch: 100%|████████| 730/730 [1:48:41<00:00,  8.93s/it, loss=0.0520]
+[Validation] Batch: 100%|████████| 157/157 [09:05<00:00,  3.48s/it, loss=2.4768]
+[Training] Epoch 4: Train Loss: 0.1855, Train Acc: 0.9368, Val Loss: 0.8929, Val Acc: 0.8050
+[Training] Epoch 5/5
+[Training] Batch: 100%|████████| 730/730 [1:25:17<00:00,  7.01s/it, loss=0.0026]
+[Validation] Batch: 100%|████████| 157/157 [04:08<00:00,  1.58s/it, loss=2.2552]
+[Training] Epoch 5: Train Loss: 0.1113, Train Acc: 0.9651, Val Loss: 1.0657, Val Acc: 0.8129
+[Training] Early stopping at epoch 5
+[Training] Training complete. Evaluating on test set...
+[Test] Batch: 100%|██████████████| 157/157 [04:07<00:00,  1.57s/it, loss=0.1564]
+[Training] All results, metrics, and plots are saved.
+[Analysis] Saving misclassified samples for further analysis...
+[Analysis] Saved 458 misclassified samples to results/improvements/misclassified_samples.csv
+[Pipeline] Model training and evaluation complete.
+
+========== Pipeline Finished =========
+All results, metrics, and plots are saved in results/improvements and data/processed_data. 
