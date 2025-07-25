@@ -1,0 +1,17 @@
+{
+  "original_samples": 15683,
+  "augmented_samples": 16683,
+  "train_samples": 11678,
+  "val_samples": 2502,
+  "test_samples": 2503,
+  "class_distribution": {
+    "negative": 5071,
+    "neutral": 4984,
+    "positive": 6628
+  },
+  "class_weights": [
+    1.0965258215962441,
+    1.1156969523263591,
+    0.8391176259251275
+  ]
+}
