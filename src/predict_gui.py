@@ -29,18 +29,51 @@ preprocessor = EnhancedPersianPreprocessor()
 model, tokenizer, device = load_model_and_tokenizer()
 class_names = ['منفی', 'خنثی', 'مثبت']
 
-st.set_page_config(page_title="تحلیل احساسات فارسی", page_icon="💬")
-st.title("💬 تحلیل احساسات متن فارسی با مدل حرفه‌ای")
-st.write("یک متن فارسی وارد کنید تا احساس آن (مثبت، منفی یا خنثی) را مدل پیش‌بینی کند.")
+st.set_page_config(page_title="تحلیل احساسات فارسی", page_icon="💬", layout="wide")
+
+# CSS for right-to-left alignment
+st.markdown("""
+<style>
+    body{
+        direction: rtl;
+    }
+    .main-header {
+        text-align: right;
+        direction: rtl;
+    }
+    .main-content {
+        text-align: right;
+        direction: rtl;
+    }
+    .stTextArea textarea {
+        text-align: right;
+        direction: rtl;
+    }
+    .stButton button {
+        text-align: center;
+    }
+    .history-section {
+        text-align: right;
+        direction: rtl;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown('<h1 class="main-header">💬 تحلیل احساسات متن فارسی با مدل تقویت شده</h1>', unsafe_allow_html=True)
+st.markdown('<p class="main-content">یک متن فارسی وارد کنید تا احساس آن (مثبت، منفی یا خنثی) را مدل پیش‌بینی کند.</p>', unsafe_allow_html=True)
 
 # --- Prediction History ---
 if 'history' not in st.session_state:
     st.session_state['history'] = []
 
-user_text = st.text_area("متن خود را وارد کنید:", height=120)
+user_text = st.text_area(
+    "متن خود را وارد کنید:", 
+    height=120,
+    placeholder="مثال: این محصول واقعاً عالی است و کیفیت بالایی دارد..."
+)
 col1, col2 = st.columns([1, 1])
-predict_btn = col1.button("پیش‌بینی احساس")
-clear_btn = col2.button("پاک‌کردن تاریخچه")
+predict_btn = col1.button("🔍 پیش‌بینی احساس", use_container_width=True)
+clear_btn = col2.button("🗑️ پاک‌کردن تاریخچه", use_container_width=True)
 
 if clear_btn:
     st.session_state['history'] = []
@@ -70,7 +103,13 @@ if predict_btn:
                 st.success(f"نتیجه: **{class_names[pred]}**")
                 st.info(f"متن پردازش‌شده: {processed}")
                 st.subheader("احتمال هر کلاس:")
-                st.bar_chart({"احتمال": probs}, use_container_width=True)
+                
+                # Create proper dataframe for chart with Persian labels
+                chart_data = pd.DataFrame({
+                    'احساس': class_names,
+                    'احتمال': probs
+                })
+                st.bar_chart(chart_data.set_index('احساس'), use_container_width=True)
                 # Add to history
                 st.session_state['history'].append({
                     'متن': user_text,
@@ -85,8 +124,38 @@ if predict_btn:
 # --- Prediction History Table ---
 if st.session_state['history']:
     st.markdown("---")
-    st.subheader("تاریخچه پیش‌بینی‌ها (این جلسه):")
+    st.markdown('<h3 class="history-section">تاریخچه پیش‌بینی‌ها (این جلسه):</h3>', unsafe_allow_html=True)
     st.dataframe(pd.DataFrame(st.session_state['history']))
 
 st.markdown("---")
-st.caption("ساخته شده با ❤️ توسط مدل ParsBERT و تیم شما | نسخه پیشرفته GUI")
+
+# --- Academic Citation ---
+st.markdown('<h3 class="main-content">📚 مراجع علمی</h3>', unsafe_allow_html=True)
+with st.expander("مشاهده مراجع"):
+    st.markdown("""
+    <div dir="ltr" style="text-align: left; line-height: 1.6; font-size: 14px;">
+        <p style="margin: 0 0 8px 0; font-weight: 600;">
+            <strong>Hosseini, P., Ramaki, A. A., Maleki, H., Anvari, M., & Mirroshandel, S. A. (2018).</strong>
+        </p>
+        <p style="margin: 0 0 8px 0;">
+            SentiPers: A sentiment analysis corpus for Persian.
+        </p>
+        <p style="margin: 0; font-style: italic; color: #6c757d;">
+            <em>arXiv preprint arXiv:1801.07737</em>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# --- Developer Credits ---
+st.markdown("---")
+st.markdown("""
+<div dir="rtl" style="text-align: center; padding: 16px 0; margin: 24px 0;">
+    <p style="margin: 0; font-size: 14px; color: #6c757d; line-height: 1.5; font-weight: 400;">
+        <span style="color: #495057; font-weight: 500;">توسعه‌دهندگان:</span>
+        <span style="color: #495057; font-weight: 400;"> سینا مرادیان، علی شجاعیان، سعید مرادعلیان</span>
+    </p>
+    <p style="margin: 4px 0 0 0; font-size: 12px; color: #adb5bd; line-height: 1.4;">
+        با کمک ابزارهای هوش مصنوعی • تابستان ۱۴۰۴
+    </p>
+</div>
+""", unsafe_allow_html=True)
