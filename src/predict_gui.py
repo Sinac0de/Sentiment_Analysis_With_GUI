@@ -160,7 +160,7 @@ st.markdown("""
         <span style="color: #495057; font-weight: 400;"> سینا مرادیان، علی شجاعیان، سعید مرادعلیان</span>
     </p>
     <p style="margin: 4px 0 0 0; font-size: 12px; color: #adb5bd; line-height: 1.4;">
-        با کمک ابزارهای هوش مصنوعی • تابستان ۱۴۰۴
+    تابستان ۱۴۰۴
     </p>
 </div>
 """, unsafe_allow_html=True)
