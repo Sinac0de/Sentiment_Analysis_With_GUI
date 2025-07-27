@@ -29,11 +29,16 @@ preprocessor = EnhancedPersianPreprocessor()
 model, tokenizer, device = load_model_and_tokenizer()
 class_names = ['منفی', 'خنثی', 'مثبت']
 
-st.set_page_config(page_title="تحلیل احساسات فارسی", page_icon="💬", layout="wide")
+st.set_page_config(page_title="تحلیل احساسات فارسی", page_icon="💬", layout="centered")
 
-# CSS for right-to-left alignment
+# CSS for right-to-left alignment and optimized width
 st.markdown("""
 <style>
+    .main .block-container {
+        max-width: 800px;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
     body{
         direction: rtl;
     }
