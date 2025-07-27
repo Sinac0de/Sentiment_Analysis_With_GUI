@@ -2,9 +2,12 @@ torch
 transformers
 scikit-learn
 pandas
+numpy
 matplotlib
 seaborn
-hazm
+hazm==0.10.0
 openpyxl
 tqdm
 streamlit
+flashtext==2.7
+nltk==3.8.1
